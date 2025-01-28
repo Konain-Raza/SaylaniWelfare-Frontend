@@ -132,9 +132,9 @@ const Dashboard = () => {
                     setActiveComponent(menu.component);
                     setSelectedMenu(index);
                   }}
-                  className={`w-full text-left p-2 rounded-lg ${
+                  className={`w-full text-left p-2 rounded-lg  ${
                     selectedMenu === index
-                      ? "bg-blue-100 text-blue-600 font-medium"
+                      ? "bg-blue-100 text-blue-600 font-bold"
                       : "hover:bg-gray-100"
                   }`}
                 >

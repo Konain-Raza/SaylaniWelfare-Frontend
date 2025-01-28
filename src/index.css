@@ -1,4 +1,10 @@
 @import "tailwindcss";
+@font-face {
+  font-family: 'Gilroy';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../src/assets/gilroy/Gilroy-Regular.ttf') format('woff2');
+}
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   margin: 0;
@@ -6,6 +12,7 @@
 }
 
 html,body{
+  font-family: "Gilroy";
   box-sizing: border-box;
   margin: 0;
   padding: 0;
