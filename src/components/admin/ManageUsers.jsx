@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
-import RegisterBeneficiary from "../receptionist/RegisterBeneficiary";
 import api from "../../axios";
+import UserRegistrationForm from "./AddUsers";
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -23,10 +22,19 @@ const ManageUsers = () => {
     fetchUsers();
   }, []);
 
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      try {
+        await api.delete(`/api/user/delete/${id}`);
+        toast.success("User deleted successfully.");
+        setUsers((prevUsers) => prevUsers.filter((user) => user._id !== id));
+      } catch (error) {
+        toast.error(error.response?.data?.message || "Failed to delete user.");
+      }
+    }
+  };
   const handleAddStakeholder = () => {
-    // Redirect to stakeholder addition page or open a modal
-    setShowRegisterForm(true);
-    toast.info("Redirecting to add stakeholder...");
+    setShowRegisterForm((prev)=>!prev);
   };
 
   return (
@@ -37,7 +45,7 @@ const ManageUsers = () => {
           onClick={handleAddStakeholder}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
-          Add Stakeholder
+       {showRegisterForm ? "Close Form" : "Add New User"}
         </button>
       </div>
       {loading ? (
@@ -49,44 +57,51 @@ const ManageUsers = () => {
           <p className="text-gray-600">No users found.</p>
         </div>
       ) : (
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        {showRegisterForm?(<RegisterBeneficiary/>):(
+        <div className="relative overflow-x-auto sm:rounded-lg">
+          {showRegisterForm ? (
+            <UserRegistrationForm/>
+          ) : (
             <table className="w-full text-sm text-left text-gray-500">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  Name
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Email
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Role
-                </th>
-            
-                <th scope="col" className="px-6 py-3">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user._id} className="bg-white border-b hover:bg-gray-50">
-                  <td className="px-6 py-4">{user.name}</td>
-                  <td className="px-6 py-4">{user.email}</td>
-                  <td className="px-6 py-4 capitalize">{user.role}</td>
-                 
-                  <td className="px-6 py-4">
-                  
-                    <button className="text-red-600 hover:underline">
-                      Delete
-                    </button>
-                  </td>
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                  <th scope="col" className="px-6 py-3">
+                    Name
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Email
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Role
+                  </th>
+
+                  <th scope="col" className="px-6 py-3">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr
+                    key={user._id}
+                    className="bg-white border-b hover:bg-gray-50"
+                  >
+                    <td className="px-6 py-4">{user.name}</td>
+                    <td className="px-6 py-4">{user.email}</td>
+                    <td className="px-6 py-4 capitalize">{user.role}</td>
+
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => handleDelete(user._id)}
+                        className="text-red-600 hover:underline"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       )}
     </div>

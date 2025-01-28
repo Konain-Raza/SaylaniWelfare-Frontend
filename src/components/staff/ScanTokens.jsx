@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import api from "../../axios";
 
@@ -15,9 +14,7 @@ const ScanTokens = () => {
     setLoading(true);
     setNotFound(false);
     try {
-      const response = await api.get(
-        `/api/beneficiary/${token}`
-      );
+      const response = await api.get(`/api/beneficiary/${token}`);
       setBeneficiary(response.data.beneficiary);
       setToken("");
       toast.success("Beneficiary information retrieved successfully");
@@ -38,10 +35,10 @@ const ScanTokens = () => {
 
     setLoading(true);
     try {
-      const response = await api.put(
-        `/api/beneficiary/${token}`,
-        { status, remarks }
-      );
+      const response = await api.put(`/api/beneficiary/${token}`, {
+        status,
+        remarks,
+      });
       setBeneficiary(response.data.beneficiary);
       toast.success("Beneficiary updated successfully");
     } catch (error) {
@@ -54,9 +51,9 @@ const ScanTokens = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center p-6">
-      <div className="w-full max-w-xl bg-white shadow-xl rounded-lg p-6">
-        <h2 className="text-3xl font-bold text-blue-700 text-center mb-6">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center p-6">
+      <div className="w-full max-w-xl bg-white shadow-lg rounded-lg p-6">
+        <h2 className="text-3xl font-bold text-center mb-6">
           Scan Beneficiary Token
         </h2>
         <div className="flex items-center gap-4 mb-6">
@@ -71,7 +68,7 @@ const ScanTokens = () => {
             onClick={fetchBeneficiary}
             disabled={loading}
             type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center disabled:opacity-50"
+            className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center disabled:opacity-50"
           >
             {loading ? (
               <>
@@ -102,8 +99,8 @@ const ScanTokens = () => {
       </div>
 
       {beneficiary ? (
-        <div className="w-full max-w-xl bg-white shadow-xl rounded-lg p-6 mt-6">
-          <h2 className="text-2xl font-bold text-green-700 text-center mb-4">
+        <div className="w-full max-w-xl bg-white shadow-lg rounded-lg p-6 mt-6">
+          <h2 className="text-2xl font-bold text-center mb-4">
             Beneficiary Details
           </h2>
           <div className="grid grid-cols-2 gap-4 mb-6">
@@ -113,7 +110,6 @@ const ScanTokens = () => {
             <p className="text-gray-700">
               <strong>CNIC:</strong> {beneficiary.cnic}
             </p>
-
             <p className="text-gray-700">
               <strong>Department:</strong> {beneficiary.department}
             </p>
@@ -158,7 +154,7 @@ const ScanTokens = () => {
             onClick={updateBeneficiary}
             disabled={loading}
             type="button"
-            className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-center gap-2 w-full disabled:opacity-50"
+            className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-center gap-2 w-full disabled:opacity-50"
           >
             {loading ? (
               <>
@@ -188,13 +184,12 @@ const ScanTokens = () => {
         </div>
       ) : (
         notFound && (
-          <div className="w-full max-w-xl bg-white shadow-xl rounded-lg p-6 mt-6">
-            <h2 className="text-2xl font-bold text-red-700 text-center mb-4">
+          <div className="w-full max-w-xl bg-white shadow-lg rounded-lg p-6 mt-6">
+            <h2 className="text-2xl font-bold text-red-600 text-center mb-4">
               Beneficiary Not Found
             </h2>
             <p className="text-gray-700 text-center">
-              The token you entered does not match any beneficiary in the
-              system.
+              The token you entered does not match any beneficiary in the system.
             </p>
           </div>
         )
