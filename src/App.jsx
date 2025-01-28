@@ -5,26 +5,28 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Login from "./components/admin/Login"; // Adjust path as necessary
-import Dashboard from "./pages/Dashboard"; // Adjust path as necessary
+import Login from "./components/admin/Login";
+import Dashboard from "./pages/Dashboard";
 
 const App = () => {
-  const isAuthenticated = !!localStorage.getItem("authToken"); // Check authentication
+  const isAuthenticated = !!localStorage.getItem("user");
 
   return (
     <Router>
       <Routes>
-        {/* Default route */}
-        <Route path="/" element={<Login />} />
-
-        {/* Login route */}
-        <Route path="/login" element={<Login />} />
-
-        {/* Protected Dashboard route */}
-        <Route path="/dashboard" element={<Dashboard />} />
-
-        {/* 404 Not Found route */}
-        <Route path="*" element={<div>NOt FOund</div>} />
+        <Route
+          path="/"
+          element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />}
+        />
+        <Route
+          path="/login"
+          element={isAuthenticated ? <Navigate to="/dashboard" /> : <Login />}
+        />
+        <Route
+          path="/dashboard"
+          element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
+        />
+        <Route path="*" element={<div>Not Found</div>} />
       </Routes>
     </Router>
   );
