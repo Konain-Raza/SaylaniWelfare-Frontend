@@ -8,7 +8,7 @@ import ViewBeneficiaries from "../components/receptionist/ViewBeneficiaries";
 import ScanTokens from "../components/staff/ScanTokens";
 import ChartsDashboard from "../components/admin/Charts";
 
-const Dashboard = () => {
+const Dashboard = ({setIsAuthenticated}) => {
   const [beneficiaryStats, setBeneficiaryStats] = useState(null);
   const [userStats, setUserStats] = useState(null);
   const [loading, setLoading] = useState(true);
