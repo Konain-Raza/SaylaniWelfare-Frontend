@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../axios";
 import InfoAlert from "../SectionMessage";
 
-const Login = () => {
+const Login = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,6 +18,7 @@ const Login = () => {
       const response = await api.post("api/auth/login", { email, password });
       const { user } = response.data;
       localStorage.setItem("user", JSON.stringify(user));
+      setIsAuthenticated(true); 
       console.log("Login successful!");
 navigate("/dashboard");
 
