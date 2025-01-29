@@ -18,13 +18,13 @@ const Login = () => {
       const response = await api.post("api/auth/login", { email, password });
       const { user } = response.data;
       localStorage.setItem("user", JSON.stringify(user));
-      toast.success("Login successful!");
-       window.location.href = "/dashboard";
+      console.log("Login successful!");
+navigate("/dashboard");
+
 
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Something went wrong. Please try again.",
-        { position: "top-center" }
+        error.response?.data?.message || "Something went wrong. Please try again."
       );
     } finally {
       setLoading(false);
