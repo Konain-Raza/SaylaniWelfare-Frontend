@@ -19,7 +19,7 @@ const Login = () => {
       const { user } = response.data;
       localStorage.setItem("user", JSON.stringify(user));
       toast.success("Login successful!", { position: "top-center" });
-      navigate("/dashboard", { state: { user } });
+      navigate("/dashboard");
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Something went wrong. Please try again.",
