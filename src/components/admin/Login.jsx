@@ -3,10 +3,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import api from "../../axios";
-import InfoAlert from "../SectionMessage";
+import useStore from "../../Store/store";
 
-const Login = ({ setIsAuthenticated }) => {
-  const navigate = useNavigate();
+const Login = () => {
+  const { setAuthenticated, setUser } = useStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,16 +17,15 @@ const Login = ({ setIsAuthenticated }) => {
     try {
       const response = await api.post("api/auth/login", { email, password });
       const { user } = response.data;
-      localStorage.setItem("user", JSON.stringify(user));
-      setIsAuthenticated(true); 
-      console.log("Login successful!");
-navigate("/dashboard");
 
+      localStorage.setItem("authSmit", JSON.stringify(user)); 
+      setUser(user); 
+      setAuthenticated(true); 
 
+      toast.success("Login Successful!");
+      navigate("/dashboard");
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Something went wrong. Please try again."
-      );
+      toast.error(error.response?.data?.message || "Invalid credentials");
     } finally {
       setLoading(false);
     }
@@ -35,11 +34,10 @@ navigate("/dashboard");
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col items-center justify-center">
       <ToastContainer />
-      <InfoAlert/>
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
         <div className="flex justify-center mb-6">
           <img
-            src="https://saylaniwelfareusa.com/static/media/logo_saylaniwelfareusa.22bf709605809177256c.png" // Replace with your image URL
+            src="https://saylaniwelfareusa.com/static/media/logo_saylaniwelfareusa.22bf709605809177256c.png"
             alt="Logo"
             className="h-16 w-auto"
           />
@@ -77,9 +75,7 @@ navigate("/dashboard");
             type="submit"
             disabled={loading}
             className={`w-full py-3 rounded-lg text-lg font-medium focus:outline-none transition ${
-              loading
-                ? "bg-blue-400 text-gray-100 cursor-not-allowed"
-                : "bg-blue-600 text-white hover:bg-blue-700"
+              loading ? "bg-blue-400 text-gray-100 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"
             }`}
           >
             {loading ? (

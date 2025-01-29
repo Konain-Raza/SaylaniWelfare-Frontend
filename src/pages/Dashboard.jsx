@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import api from "../axios";
+import useStore from "../Store/store";
 import ManageUsers from "../components/admin/ManageUsers";
 import UserDropdown from "../components/admin/UserDropdown";
 import RegisterBeneficiary from "../components/receptionist/RegisterBeneficiary";
 import ViewBeneficiaries from "../components/receptionist/ViewBeneficiaries";
 import ScanTokens from "../components/staff/ScanTokens";
 import ChartsDashboard from "../components/admin/Charts";
-
-const Dashboard = ({setIsAuthenticated}) => {
-  const [beneficiaryStats, setBeneficiaryStats] = useState(null);
-  const [userStats, setUserStats] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [user, setUser] = useState(null);
+import UserRegistrationForm from "../components/admin/AddUsers";
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
+const Dashboard = () => {
+  const { user, setUser, userStats, beneficiaryStats } = useStore();
+  const [expandedMenu, setExpandedMenu] = useState(null);
   const [activeComponent, setActiveComponent] = useState(null);
-  const [selectedMenu, setSelectedMenu] = useState(0);
+  const [selectedMenu, setSelectedMenu] = useState(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -23,105 +21,80 @@ const Dashboard = ({setIsAuthenticated}) => {
   const menus = {
     admin: [
       {
-        name: "Overview",
+        name: "Dashboard Overview",
         component:
           beneficiaryStats && userStats ? (
-            <ChartsDashboard
-              beneficiaryData={beneficiaryStats}
-              userData={userStats}
-            />
+            <ChartsDashboard />
           ) : (
             <div className="text-center">Loading Charts...</div>
           ),
       },
-      { name: "User Management", component: <ManageUsers /> },
-      { name: "Beneficiary Records", component: <ViewBeneficiaries /> },
-      { name: "Register New Beneficiary", component: <RegisterBeneficiary /> },
+      {
+        name: "User Management",
+        subMenu: [
+          { name: "All Users", component: <ManageUsers /> },
+          { name: "Add New User", component: <UserRegistrationForm /> },
+        ],
+      },
+      {
+        name: "Beneficiary Services",
+        subMenu: [
+          { name: "All Beneficiaries", component: <ViewBeneficiaries /> },
+          { name: "Register Beneficiary", component: <RegisterBeneficiary /> },
+          { name: "Token Verification", component: <ScanTokens /> },
+        ],
+      },
     ],
     receptionist: [
-      { name: "Add Beneficiary", component: <RegisterBeneficiary /> },
-      { name: "Beneficiary Records", component: <ViewBeneficiaries /> },
+      {
+        name: "Beneficiary Services",
+        subMenu: [
+          {
+            name: "Register Beneficiary",
+            component: <RegisterBeneficiary />,
+          },
+          { name: "All Beneficiaries", component: <ViewBeneficiaries /> },
+        ],
+      },
     ],
-    staff: [
-      { name: "Scan Tokens", component: <ScanTokens /> },
-    ],
+    staff: [{ name: "Token Verification", component: <ScanTokens /> }],
   };
-  
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        setLoading(true);
-        const [usersResponse, beneficiariesResponse] = await Promise.all([
-          api.get("/api/user"),
-          api.get("/api/beneficiary"),
-        ]);
-
-        const users = usersResponse.data || [];
-        const beneficiaries = beneficiariesResponse.data || [];
-
-        setUserStats({
-          admin: users.filter((user) => user.role === "admin").length,
-          receptionist: users.filter((user) => user.role === "Receptionist")
-            .length,
-          staff: users.filter((user) => user.role === "Staff").length,
-        });
-
-        setBeneficiaryStats({
-          approved: beneficiaries.filter((b) => b.status === "approved").length,
-          pending: beneficiaries.filter((b) => b.status === "Pending").length,
-          rejected: beneficiaries.filter((b) => b.status === "rejected").length,
-        });
-
-        setError(null);
-      } catch {
-        setError("Failed to fetch data. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStats();
-  }, []);
-
-  useEffect(() => {
-    const userFromLocation = location.state?.user || null;
-    const userFromStorage = JSON.parse(localStorage.getItem("user") || "{}");
-    const currentUser = userFromLocation || userFromStorage;
-
+    const currentUser =
+      location.state?.user ||
+      JSON.parse(localStorage.getItem("authSmit") || "{}");
     if (!currentUser?.role) {
       navigate("/login");
     } else {
       setUser(currentUser);
     }
-  }, [location, navigate]);
+  }, [location, navigate, setUser]);
 
   useEffect(() => {
-    if (user && beneficiaryStats && userStats) {
+    if (user?.role) {
       const roleKey = user.role.toLowerCase();
-      const sidebarMenu = menus[roleKey] || [];
-      setActiveComponent(
-        sidebarMenu[0]?.component || (
-          <div className="text-center">No menu available for this role</div>
-        )
-      );
+      const firstMenu = menus[roleKey]?.[0];
+      if (firstMenu) {
+        setActiveComponent(firstMenu.component);
+        setSelectedMenu(0);
+      }
     }
-  }, [user, beneficiaryStats, userStats]);
-
-  if (loading || !activeComponent)
-    return <div className="text-center">Loading...</div>;
-  if (error) return <div className="text-center text-red-600">{error}</div>;
+  }, [user]);
 
   return (
     <div className="flex h-screen">
       <aside className="w-[20%] bg-white text-gray-800 flex-shrink-0 shadow-md">
-        <div className="flex items-center p-4 pb-6 text-lg font-bold border-b border-gray-200">
-          <img
-            src="https://saylaniwelfare.com/favicon.png"
-            alt="Saylani Logo"
-            className="w-8 h-8 mr-2"
-          />
-          Saylani Welfare
+        <div className="flex items-center flex-col p-5 text-xl font-bold border-b border-gray-200">
+          <div className="inline-flex  items-star">
+            {" "}
+            <img
+              src="https://saylaniwelfare.com/favicon.png"
+              alt="Saylani Logo"
+              className="w-8 h-8 mr-2"
+            />
+            Saylani Welfare
+          </div>
         </div>
         <ul className="space-y-2 p-4">
           {user &&
@@ -129,17 +102,52 @@ const Dashboard = ({setIsAuthenticated}) => {
               <li key={index}>
                 <button
                   onClick={() => {
-                    setActiveComponent(menu.component);
-                    setSelectedMenu(index);
+                    if (menu.subMenu) {
+                      setExpandedMenu(expandedMenu === index ? null : index);
+                    } else {
+                      setActiveComponent(menu.component);
+                      setSelectedMenu(index);
+                    }
                   }}
-                  className={`w-full text-left p-2 rounded-lg  ${
+                  className={`w-full text-left p-2 rounded-lg flex justify-between ${
                     selectedMenu === index
                       ? "bg-blue-100 text-blue-600 font-bold"
                       : "hover:bg-gray-100"
                   }`}
                 >
                   {menu.name}
+                  {menu.subMenu && (
+                    <span>
+                      {expandedMenu === index ? (
+                        <ChevronUpIcon className="w-5 h-5 inline-block" />
+                      ) : (
+                        <ChevronDownIcon className="w-5 h-5 inline-block" />
+                      )}
+                    </span>
+                  )}
                 </button>
+
+                {menu.subMenu && expandedMenu === index && (
+                  <ul className="ml-4 mt-2 space-y-2">
+                    {menu.subMenu.map((sub, subIndex) => (
+                      <li key={subIndex}>
+                        <button
+                          onClick={() => {
+                            setActiveComponent(sub.component);
+                            setSelectedMenu(`${index}-${subIndex}`);
+                          }}
+                          className={`w-full text-left p-2 rounded-lg ${
+                            selectedMenu === `${index}-${subIndex}`
+                              ? "bg-blue-200 text-blue-700 font-bold"
+                              : "hover:bg-gray-200"
+                          }`}
+                        >
+                          {sub.name}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
         </ul>

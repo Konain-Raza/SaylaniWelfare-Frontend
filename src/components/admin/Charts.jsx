@@ -1,19 +1,22 @@
 import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js";
 import { Doughnut, Bar } from "react-chartjs-2";
+import useStore from "../../Store/store";
 
 // Register only the components needed
 ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
-const ChartsDashboard = ({ beneficiaryData, userData }) => {
+const ChartsDashboard = () => {
+  const {beneficiaryStats, userStats} = useStore();
+  console.log(beneficiaryStats)
   const beneficiaryChartData = {
-    labels: ["Approved", "Pending", "Rejected"],
+    labels: ["Completed", "Pending", "In Progress"],
     datasets: [
       {
         label: "Beneficiary Status",
-        data: [beneficiaryData.approved, beneficiaryData.pending, beneficiaryData.rejected],
-        backgroundColor: ["#4CAF50", "#FFC107", "#F44336"],
-        hoverBackgroundColor: ["#45A049", "#FFB300", "#E53935"],
+        data: [beneficiaryStats.completed, beneficiaryStats.pending, beneficiaryStats.progress],
+        backgroundColor: ["#4CAF50", "#FFC107", "#2196F3"],
+        hoverBackgroundColor: ["#45A049", "#FFB300", "#1976D2"],
       },
     ],
   };
@@ -23,7 +26,7 @@ const ChartsDashboard = ({ beneficiaryData, userData }) => {
     datasets: [
       {
         label: "User Roles",
-        data: [userData.admin, userData.receptionist, userData.staff],
+        data: [userStats.admin, userStats.receptionist, userStats.staff],
         backgroundColor: ["#2196F3", "#3F51B5", "#9C27B0"],
         hoverBackgroundColor: ["#1976D2", "#303F9F", "#7B1FA2"],
       },

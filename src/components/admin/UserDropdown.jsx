@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
-const UserDropdown = ({ user }) => {
+import useStore from "../../Store/store";
+const UserDropdown = () => {
+  const { user,setAuthenticated } = useStore();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -66,8 +67,7 @@ const UserDropdown = ({ user }) => {
             <li>
               <button
                 onClick={() => {
-                  localStorage.removeItem("user");
-                  navigate("/");
+                  setAuthenticated(false)
                 }}
                 className="w-full text-left px-4 py-2 hover:bg-gray-100"
               >
