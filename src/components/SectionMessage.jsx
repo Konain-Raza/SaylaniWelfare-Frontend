@@ -30,7 +30,7 @@ const InfoAlert = () => {
         <p className="mt-1">For testing purposes, use the following credentials:</p>
         <ul className="mt-1.5 list-disc list-inside">
           <li>Email: <span className="font-medium">admin@smit.com</span></li>
-          <li>Password: <span className="font-medium">Mondeo</span></li>
+          <li>Password: <span className="font-medium">Mondego</span></li>
         </ul>
       </div>
       <button
