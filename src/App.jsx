@@ -35,7 +35,7 @@ const App = () => {
         />
         <Route
           path="/dashboard"
-          element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
+          element={isAuthenticated ? <Dashboard setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/login" />}
         />
         <Route path="*" element={<div>Not Found</div>} />
       </Routes>
