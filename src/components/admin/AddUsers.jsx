@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import api from "../../axios";
+import useStore from "../../Store/store";
 
 const UserRegistrationForm = () => {
+  const { setUsers } = useStore();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -54,6 +56,7 @@ const UserRegistrationForm = () => {
           confirmPassword: "",
           role: "Receptionist",
         });
+        setUsers(response.data.users);
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Error registering user");

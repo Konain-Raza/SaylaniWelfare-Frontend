@@ -85,8 +85,8 @@ const Dashboard = () => {
   return (
     <div className="flex h-screen">
       <aside className="w-[20%] bg-white text-gray-800 flex-shrink-0 shadow-md">
-        <div className="flex items-center flex-col p-5 text-xl font-bold border-b border-gray-200">
-          <div className="inline-flex  items-star">
+        <div className="flex items-start flex-col p-5 text-xl font-bold border-b border-gray-200">
+          <div className="flex justify-items-start items-center">
             {" "}
             <img
               src="https://saylaniwelfare.com/favicon.png"

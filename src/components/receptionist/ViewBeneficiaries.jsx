@@ -8,6 +8,7 @@ const ViewBeneficiaries = () => {
   const { beneficiaries, setBeneficiaries } = useStore();
   const [selectedBeneficiary, setSelectedBeneficiary] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const openModal = (beneficiary) => setSelectedBeneficiary(beneficiary);
   const closeModal = () => setSelectedBeneficiary(null);
@@ -42,6 +43,13 @@ const ViewBeneficiaries = () => {
     }
   };
 
+  const filteredBeneficiaries = beneficiaries.filter((b) =>
+    searchTerm
+      ? b.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        String(b.cnic).includes(searchTerm)
+      : true
+  );
+
   if (selectedBeneficiary) {
     return (
       <BeneficiaryDetails
@@ -55,8 +63,17 @@ const ViewBeneficiaries = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-100">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Beneficiary Records</h1>
+    <div className="p-4 bg-gray-100">
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">
+        Beneficiary Records
+      </h1>
+      <input
+        type="text"
+        placeholder="Search by Name or CNIC"
+        className="w-max px-4 py-2 mb-4 border border-gray-300 rounded-lg shadow-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -69,14 +86,20 @@ const ViewBeneficiaries = () => {
             </tr>
           </thead>
           <tbody>
-            {beneficiaries.map((beneficiary) => (
-              <tr key={beneficiary._id} className="bg-white border-b hover:bg-gray-50">
+            {filteredBeneficiaries.map((beneficiary) => (
+              <tr
+                key={beneficiary._id}
+                className="bg-white border-b hover:bg-gray-50"
+              >
                 <td className="px-6 py-4">{beneficiary.name}</td>
                 <td className="px-6 py-4">{beneficiary.cnic}</td>
                 <td className="px-6 py-4">{beneficiary.department}</td>
                 <td className="px-6 py-4">{beneficiary.status}</td>
                 <td className="px-6 py-4">
-                  <button className="text-blue-600 hover:underline" onClick={() => openModal(beneficiary)}>
+                  <button
+                    className="text-blue-600 hover:underline"
+                    onClick={() => openModal(beneficiary)}
+                  >
                     View
                   </button>
                 </td>

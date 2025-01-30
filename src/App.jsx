@@ -7,12 +7,14 @@ import {
 } from "react-router-dom";
 import Login from "./components/admin/Login";
 import Dashboard from "./pages/Dashboard";
+import ErrorPage from "./pages/ErrorPage";
 import useStore from "./Store/store";
 import api from "./axios";
 
 const App = () => {
   const { isAuthenticated, setUsers, setBeneficiaries } = useStore();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,20 +24,23 @@ const App = () => {
           api.get("api/beneficiary"),
         ]);
 
-        setUsers(usersResponse.data);
-        setBeneficiaries(beneficiariesResponse.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+        if (
+          usersResponse.status === 200 &&
+          beneficiariesResponse.status === 200
+        ) {
+          setUsers(usersResponse.data);
+          setBeneficiaries(beneficiariesResponse.data);
+        } else {
+          setError(true);
+        }
+      } catch {
+        setError(true);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
-    if (isAuthenticated) {
-      fetchData();
-    } else {
-      setLoading(false);
-    }
+    isAuthenticated ? fetchData() : setLoading(false);
   }, [isAuthenticated, setUsers, setBeneficiaries]);
 
   if (loading) {
@@ -44,7 +49,7 @@ const App = () => {
         <div role="status">
           <svg
             aria-hidden="true"
-            class="w-16 h-16 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            className="w-16 h-16 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -58,10 +63,14 @@ const App = () => {
               fill="currentFill"
             />
           </svg>
-          <span class="sr-only">Loading...</span>
+          <span className="sr-only">Loading...</span>
         </div>
       </div>
     );
+  }
+
+  if (error) {
+    return <ErrorPage errorCode={500} />;
   }
 
   return (
@@ -79,14 +88,7 @@ const App = () => {
           path="/dashboard"
           element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />}
         />
-        <Route
-          path="*"
-          element={
-            <div className="text-center text-gray-600 text-xl">
-              404 - Page Not Found
-            </div>
-          }
-        />
+        <Route path="*" element={<ErrorPage errorCode={400} />} />
       </Routes>
     </Router>
   );
