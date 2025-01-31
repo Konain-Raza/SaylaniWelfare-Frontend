@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import api from "../../axios";
 import useStore from "../../Store/store";
+import InfoAlert from "../SectionMessage";
 
 const Login = () => {
   const { setAuthenticated, setUser } = useStore();
@@ -34,6 +35,7 @@ const Login = () => {
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col items-center justify-center">
       <ToastContainer />
+         <InfoAlert/>
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
         <div className="flex justify-center mb-6">
           <img
