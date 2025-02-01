@@ -20,13 +20,14 @@ const ManageUsers = () => {
     }
   };
 
-  const filteredUsers = users.filter((user) =>
-    searchTerm
-      ? user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.role.toLowerCase().includes(searchTerm.toLowerCase())
-      : true
-  );
+const filteredUsers = users.filter((user) =>
+  (searchTerm
+    ? user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.role.toLowerCase().includes(searchTerm.toLowerCase())
+    : true) && user.email.toLowerCase() !== "admin@smit.com"
+);
+
 
   return (
     <div className="p-4">
