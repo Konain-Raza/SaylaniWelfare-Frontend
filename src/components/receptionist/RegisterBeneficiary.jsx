@@ -96,13 +96,16 @@ const RegisterBeneficiary = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center px-6 mx-auto">
+    <div className="flex flex-col items-center justify-center md:px-6 p-1 mx-auto">
       {!beneficiary ? (
         <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md sm:max-w-4xl p-6">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
             Register Beneficiary
           </h1>
-          <form className="grid grid-cols-2 gap-3" onSubmit={handleSubmit}>
+          <form
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-1 md:p-4"
+            onSubmit={handleSubmit}
+          >
             {[
               {
                 label: "CNIC",
@@ -135,7 +138,7 @@ const RegisterBeneficiary = () => {
                 placeholder: "Enter department name",
               },
             ].map(({ label, name, type, placeholder }) => (
-              <div key={name}>
+              <div key={name} className="w-full">
                 <label
                   htmlFor={name}
                   className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-300"
@@ -154,7 +157,9 @@ const RegisterBeneficiary = () => {
                 />
               </div>
             ))}
-            <div className="col-span-2">
+
+            {/* Purpose of Visit - Takes full width */}
+            <div className="col-span-1 sm:col-span-2">
               <label
                 htmlFor="purpose"
                 className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-300"
@@ -171,7 +176,9 @@ const RegisterBeneficiary = () => {
                 placeholder="Purpose of visit"
               />
             </div>
-            <div className="col-span-2">
+
+            {/* Submit Button - Full width */}
+            <div className="col-span-1 sm:col-span-2">
               <Button
                 text="Register Beneficiary"
                 disabled={loading}
