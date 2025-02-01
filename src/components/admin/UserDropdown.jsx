@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import useStore from "../../Store/store";
 
 const UserDropdown = () => {
   const { user, setAuthenticated } = useStore();
-  const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("smitMode") === "true"
   );
   const dropdownRef = useRef(null);
 
+  const profilePicture = {
+    Admin: "https://cdn-icons-png.flaticon.com/128/560/560277.png",
+    Receptionist: "https://cdn-icons-png.flaticon.com/128/4140/4140039.png",
+    Staff: "https://cdn-icons-png.flaticon.com/128/6997/6997674.png",
+}
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -44,11 +47,11 @@ const UserDropdown = () => {
         className="flex items-center bg-white dark:bg-gray-800 text-gray-700 dark:text-white border border-gray-300 dark:border-gray-700 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-300"
         onClick={toggleDropdown}
       >
-        <img
-          className="w-10 h-10 rounded-full"
-          src="https://cdn-icons-png.flaticon.com/128/1326/1326377.png"
-          alt="user"
-        />
+    <img
+  className="w-10 h-10 rounded-full"
+  src={profilePicture[user?.role] || "https://cdn-icons-png.flaticon.com/128/149/149071.png"}
+  alt="user"
+/>
         <span className="ml-2 text-sm font-medium hidden sm:inline dark:text-white">
           {user.name}
         </span>

@@ -8,7 +8,7 @@ import ViewBeneficiaries from "../components/receptionist/ViewBeneficiaries";
 import ScanTokens from "../components/staff/ScanTokens";
 import ChartsDashboard from "../components/admin/Charts";
 import UserRegistrationForm from "../components/admin/AddUsers";
-import { ChevronUpIcon, ChevronDownIcon, Bars3Icon, XMarkIcon,Bars3BottomLeftIcon, Bars3BottomRightIcon } from "@heroicons/react/24/solid";
+import { ChevronUpIcon, ChevronDownIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 
 const Dashboard = () => {
   const { user, setUser, userStats, beneficiaryStats } = useStore();
@@ -16,8 +16,7 @@ const Dashboard = () => {
   const [activeComponent, setActiveComponent] = useState(null);
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  // const [expandedMenu, setExpandedMenu] = useState(null);
-  // const [selectedMenu, setSelectedMenu] = useState(null);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -101,7 +100,7 @@ const Dashboard = () => {
     
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-md transition-transform duration-300 transform ${
+        className={`z-50 fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-md transition-transform duration-300 transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:relative md:translate-x-0 md:w-[20%]`}
       >
