@@ -29,25 +29,27 @@ const ManageUsers = () => {
   );
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Manage Users</h1>
-      
+    <div className="p-4 rounded-2xl bg-gray-100 dark:bg-gray-900">
+      <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+        Manage Users
+      </h1>
+
       <input
         type="text"
         placeholder="Search by Name, Email, or Role"
-        className="w-max px-4 py-2 mb-4 border border-gray-300 rounded-lg shadow-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        className="w-full md:w-max px-4 py-2 mb-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-gray-900 dark:text-gray-200 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
 
       {filteredUsers.length === 0 ? (
         <div className="text-center py-6">
-          <p className="text-gray-600">No users found.</p>
+          <p className="text-gray-600 dark:text-gray-400">No users found.</p>
         </div>
       ) : (
         <div className="relative overflow-x-auto sm:rounded-lg">
-          <table className="w-full text-sm text-left text-gray-500">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-300">
+            <thead className="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">
               <tr>
                 <th className="px-6 py-3">Name</th>
                 <th className="px-6 py-3">Email</th>
@@ -59,15 +61,21 @@ const ManageUsers = () => {
               {filteredUsers.map((user) => (
                 <tr
                   key={user._id}
-                  className="bg-white border-b hover:bg-gray-50"
+                  className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   <td className="px-6 py-4">{user.name}</td>
                   <td className="px-6 py-4">{user.email}</td>
                   <td className="px-6 py-4 capitalize">{user.role}</td>
                   <td className="px-6 py-4">
                     <button
+                      disabled={user.email === "admin@smit.com"}
                       onClick={() => handleDelete(user._id)}
-                      className="text-red-600 hover:underline"
+                      className={`text-red-600 dark:text-red-400 hover:underline 
+    ${
+      user.email === "admin@smit.com"
+        ? "opacity-50 cursor-not-allowed hover:no-underline text-gray-400 dark:text-gray-500"
+        : "hover:text-red-800 dark:hover:text-red-500"
+    }`}
                     >
                       Delete
                     </button>

@@ -8,13 +8,16 @@ import ViewBeneficiaries from "../components/receptionist/ViewBeneficiaries";
 import ScanTokens from "../components/staff/ScanTokens";
 import ChartsDashboard from "../components/admin/Charts";
 import UserRegistrationForm from "../components/admin/AddUsers";
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
+import { ChevronUpIcon, ChevronDownIcon, Bars3Icon, XMarkIcon,Bars3BottomLeftIcon, Bars3BottomRightIcon } from "@heroicons/react/24/solid";
+
 const Dashboard = () => {
   const { user, setUser, userStats, beneficiaryStats } = useStore();
   const [expandedMenu, setExpandedMenu] = useState(null);
   const [activeComponent, setActiveComponent] = useState(null);
   const [selectedMenu, setSelectedMenu] = useState(null);
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  // const [expandedMenu, setExpandedMenu] = useState(null);
+  // const [selectedMenu, setSelectedMenu] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -83,11 +86,27 @@ const Dashboard = () => {
   }, [user]);
 
   return (
-    <div className="flex h-screen">
-      <aside className="w-[20%] bg-white text-gray-800 flex-shrink-0 shadow-md">
-        <div className="flex items-start flex-col p-5 text-xl font-bold border-b border-gray-200">
+
+    <div className="flex h-screen relative">
+      <button
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className="md:hidden fixed top-4 left-4 bg-gray-200 dark:bg-gray-700 p-2 rounded-md z-50"
+      >
+        {isSidebarOpen ? (
+          <XMarkIcon className="w-6 h-6 text-gray-800 dark:text-gray-200" />
+        ) : (
+          <Bars3Icon className="w-6 h-6 text-gray-800 dark:text-gray-200" />
+        )}
+      </button>
+    
+      {/* Sidebar */}
+      <aside
+        className={`fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-md transition-transform duration-300 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:relative md:translate-x-0 md:w-[20%]`}
+      >
+        <div className="flex items-start flex-col p-5 text-xl font-bold border-b border-gray-200 dark:border-gray-700">
           <div className="flex justify-items-start items-center">
-            {" "}
             <img
               src="https://saylaniwelfare.com/favicon.png"
               alt="Saylani Logo"
@@ -107,12 +126,13 @@ const Dashboard = () => {
                     } else {
                       setActiveComponent(menu.component);
                       setSelectedMenu(index);
+                      setIsSidebarOpen(false); 
                     }
                   }}
                   className={`w-full text-left p-2 rounded-lg flex justify-between ${
                     selectedMenu === index
-                      ? "bg-blue-100 text-blue-600 font-bold"
-                      : "hover:bg-gray-100"
+                      ? "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 font-bold"
+                      : "hover:bg-gray-100 dark:hover:bg-gray-700"
                   }`}
                 >
                   {menu.name}
@@ -126,7 +146,7 @@ const Dashboard = () => {
                     </span>
                   )}
                 </button>
-
+    
                 {menu.subMenu && expandedMenu === index && (
                   <ul className="ml-4 mt-2 space-y-2">
                     {menu.subMenu.map((sub, subIndex) => (
@@ -135,11 +155,12 @@ const Dashboard = () => {
                           onClick={() => {
                             setActiveComponent(sub.component);
                             setSelectedMenu(`${index}-${subIndex}`);
+                            setIsSidebarOpen(false); // Close sidebar on mobile click
                           }}
                           className={`w-full text-left p-2 rounded-lg ${
                             selectedMenu === `${index}-${subIndex}`
-                              ? "bg-blue-200 text-blue-700 font-bold"
-                              : "hover:bg-gray-200"
+                              ? "bg-blue-200 dark:bg-blue-800 text-blue-700 dark:text-blue-300 font-bold"
+                              : "hover:bg-gray-200 dark:hover:bg-gray-700"
                           }`}
                         >
                           {sub.name}
@@ -152,25 +173,24 @@ const Dashboard = () => {
             ))}
         </ul>
       </aside>
-
-      <div className="w-[80%] flex flex-col">
-        <nav className="bg-white shadow px-6 py-2 flex justify-between items-center">
-          <span className="text-xl font-semibold">
+    
+      {/* Main Content */}
+      <div className="w-full md:w-[80%] flex flex-col">
+        <nav className="bg-white dark:bg-gray-900 shadow px-6 py-2 flex items-center justify-between md:justify-between relative z-40">
+          <span className="text-xl font-semibold dark:text-gray-200 whitespace-nowrap md:ml-0 ml-12">
             {user?.role
-              ? `${
-                  user.role.charAt(0).toUpperCase() + user.role.slice(1)
-                } Dashboard`
+              ? `${user.role.charAt(0).toUpperCase() + user.role.slice(1)} Dashboard`
               : "Dashboard"}
           </span>
-          <UserDropdown
-            user={user || { name: "Guest", role: "Unknown", email: "N/A" }}
-          />
+          <UserDropdown user={user || { name: "Guest", role: "Unknown", email: "N/A" }} />
         </nav>
-        <main className="flex-1 p-6 bg-gray-100 overflow-y-auto">
+        <main className="flex-1 p-6 bg-gray-100 dark:bg-gray-700 overflow-y-auto">
           {activeComponent}
         </main>
       </div>
     </div>
+
+
   );
 };
 

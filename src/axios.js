@@ -1,7 +1,8 @@
   import axios from 'axios';
 
   const apiClient = axios.create({
-    baseURL: process.env.REACT_APP_API_URL || 'https://saylani-welfare-backend.vercel.app',
+    baseURL:"http://localhost:2000/",
+    // baseURL: process.env.REACT_APP_API_URL || 'https://saylani-welfare-backend.vercel.app',
     timeout: 10000,
     headers: {
       'Content-Type': 'application/json',

@@ -1,20 +1,38 @@
 import React from "react";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+} from "chart.js";
 import { Doughnut, Bar } from "react-chartjs-2";
 import useStore from "../../Store/store";
 
-// Register only the components needed
-ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale
+);
 
 const ChartsDashboard = () => {
-  const {beneficiaryStats, userStats} = useStore();
-  console.log(beneficiaryStats)
+  const { beneficiaryStats, userStats } = useStore();
+
   const beneficiaryChartData = {
     labels: ["Completed", "Pending", "In Progress"],
     datasets: [
       {
         label: "Beneficiary Status",
-        data: [beneficiaryStats.completed, beneficiaryStats.pending, beneficiaryStats.progress],
+        data: [
+          beneficiaryStats.completed,
+          beneficiaryStats.pending,
+          beneficiaryStats.progress,
+        ],
         backgroundColor: ["#4CAF50", "#FFC107", "#2196F3"],
         hoverBackgroundColor: ["#45A049", "#FFB300", "#1976D2"],
       },
@@ -33,72 +51,26 @@ const ChartsDashboard = () => {
     ],
   };
 
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "bottom",
-        labels: {
-          font: {
-            size: 14,
-          },
-        },
-      },
-    },
-  };
-
-  const barChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-    scales: {
-      x: {
-        grid: {
-          display: false,
-        },
-        ticks: {
-          font: {
-            size: 12,
-          },
-        },
-      },
-      y: {
-        grid: {
-          drawBorder: false,
-        },
-        ticks: {
-          font: {
-            size: 12,
-          },
-        },
-      },
-    },
-  };
-
   return (
-<div className="grid grid-cols-2 gap-8">
-  <div className="w-full max-h-80 bg-white p-6 rounded-xl shadow-md">
-    <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-      Beneficiary Status
-    </h2>
-    <div className="h-64 w-ful flex items-center justify-center">
-      <Doughnut data={beneficiaryChartData} options={chartOptions} />
-    </div>
-  </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 bg-gray-100 dark:bg-gray-900 rounded-2xl">
+      <div className="w-full max-h-80 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 text-center">
+          Beneficiary Status
+        </h2>
+        <div className="h-64 w-full flex items-center justify-center">
+          <Doughnut data={beneficiaryChartData} />
+        </div>
+      </div>
 
-  <div className="w-full max-h-80 bg-white p-6 rounded-xl shadow-md">
-    <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-      User Roles Distribution
-    </h2>
-    <div className="h-64">
-      <Bar data={userChartData} options={barChartOptions} />
+      <div className="w-full max-h-80 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 text-center">
+          User Roles Distribution
+        </h2>
+        <div className="h-64">
+          <Bar data={userChartData} />
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
   );
 };
 

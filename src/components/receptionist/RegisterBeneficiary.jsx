@@ -96,10 +96,10 @@ const RegisterBeneficiary = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center px-6 mx-auto ">
+    <div className="flex flex-col items-center justify-center px-6 mx-auto">
       {!beneficiary ? (
-        <div className="w-full bg-white rounded-lg shadow-md sm:max-w-4xl p-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">
+        <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md sm:max-w-4xl p-6">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
             Register Beneficiary
           </h1>
           <form className="grid grid-cols-2 gap-3" onSubmit={handleSubmit}>
@@ -138,7 +138,7 @@ const RegisterBeneficiary = () => {
               <div key={name}>
                 <label
                   htmlFor={name}
-                  className="block mb-2 text-sm font-medium text-gray-800"
+                  className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-300"
                 >
                   {label}
                 </label>
@@ -148,7 +148,7 @@ const RegisterBeneficiary = () => {
                   id={name}
                   value={formData[name]}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg p-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-gray-800 dark:text-white bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder={placeholder}
                   required
                 />
@@ -157,7 +157,7 @@ const RegisterBeneficiary = () => {
             <div className="col-span-2">
               <label
                 htmlFor="purpose"
-                className="block mb-2 text-sm font-medium text-gray-800"
+                className="block mb-2 text-sm font-medium text-gray-800 dark:text-gray-300"
               >
                 Purpose of Visit
               </label>
@@ -167,7 +167,7 @@ const RegisterBeneficiary = () => {
                 id="purpose"
                 value={formData.purpose}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg p-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2.5 text-gray-800 dark:text-white bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Purpose of visit"
               />
             </div>
@@ -184,15 +184,15 @@ const RegisterBeneficiary = () => {
       ) : (
         <div
           ref={contentRef}
-          className="bg-white p-8 rounded-2xl shadow-xl text-center max-w-xl mx-auto border border-gray-200"
+          className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl text-center max-w-xl mx-auto border border-gray-200 dark:border-gray-700"
         >
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-2">
+          <h2 className="text-3xl font-extrabold text-gray-800 dark:text-white mb-2">
             Beneficiary Token
           </h2>
 
-          <div className="space-y-2 text-gray-700">
+          <div className="space-y-2 text-gray-700 dark:text-gray-300">
             <div>
-              <span className="block text-sm font-medium text-gray-500">
+              <span className="block text-sm font-medium text-gray-500 dark:text-gray-400">
                 Name
               </span>
               <span className="block text-lg font-semibold">
@@ -200,7 +200,7 @@ const RegisterBeneficiary = () => {
               </span>
             </div>
             <div>
-              <span className="block text-sm font-medium text-gray-500">
+              <span className="block text-sm font-medium text-gray-500 dark:text-gray-400">
                 CNIC
               </span>
               <span className="block text-lg font-semibold">
@@ -208,7 +208,7 @@ const RegisterBeneficiary = () => {
               </span>
             </div>
             <div>
-              <span className="block text-sm font-medium text-gray-500">
+              <span className="block text-sm font-medium text-gray-500 dark:text-gray-400">
                 Token
               </span>
               <span className="block text-lg font-semibold">
@@ -220,20 +220,20 @@ const RegisterBeneficiary = () => {
           <div className="my-4">
             <QRCodeCanvas
               value={beneficiary.token}
-              className="mx-auto w-32 h-32 p-2 border border-gray-300 rounded-lg"
+              className="mx-auto w-32 h-32 p-2 border border-gray-300 dark:border-gray-600 rounded-lg"
             />
           </div>
 
           <div className="flex justify-between mt-4">
             <button
               onClick={() => setBeneficiary(null)}
-              className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+              className="bg-gray-500 dark:bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700"
             >
               Go Back
             </button>
             <button
               onClick={reactToPrintFn}
-              className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+              className="bg-green-500 dark:bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-600 dark:hover:bg-green-700"
             >
               Print as PDF
             </button>

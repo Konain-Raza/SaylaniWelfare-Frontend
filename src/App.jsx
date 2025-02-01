@@ -17,6 +17,8 @@ const App = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    document.documentElement.classList.add("dark");
+
     const fetchData = async () => {
       try {
         const [usersResponse, beneficiariesResponse] = await Promise.all([
@@ -45,7 +47,7 @@ const App = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
         <div role="status">
           <svg
             aria-hidden="true"
